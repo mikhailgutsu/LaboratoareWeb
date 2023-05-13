@@ -1,74 +1,69 @@
 ﻿import React, { useState } from 'react';
-import { Layout, Menu, Card, Form, Input, Button } from 'antd';
-const { SubMenu } = Menu;
+import { Input, Form, Button } from 'antd';
 
-const { Header, Content, Footer, Sider } = Layout;
+import './App.css';
 
-const App = () => {
-    const [form] = Form.useForm();
-    const [cards, setCards] = useState([
-        { title: 'Gutu', content: 'Mihai', prenume: '20' },
+interface MyInterface {
+    name: string;
+    age: number;
+    email: string;
+    address: string;
+    phone: string;
+}
 
-    ]);
-    const handleSubmit = (values: { title: string; content: string; prenume: string }) => {
-        const newCard = { title: values.title, content: values.content, prenume: values.prenume };
-        const newCards = [...cards, newCard];
-        setCards(newCards);
-        console.log('valorile', values);
-        alert('Forma a fost adaugata');
+export interface MyExtendedInterface extends MyInterface {
+    occupation: string;
+    salary: number;
+}
+
+interface MyComponentProps {
+    data: MyExtendedInterface;
+    onSubmit: (data: MyExtendedInterface) => void;
+}
+
+export const App: React.FC<MyComponentProps> = ({ data, onSubmit }) => {
+    const [formData, setFormData] = useState(data);
+
+    const handleFinish = () => {
+        onSubmit(formData);
     };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
     return (
-        <Layout >
-            <Header style={{ display: 'flex', justifyContent: 'center' }}>
-                <Menu theme="dark" mode="horizontal">
-                    <Menu.Item key="1">LABORATORUL 3</Menu.Item>
-                </Menu>
-            </Header>
-            <Layout >
-                <Sider width={300} style={{ background: '#fff' }}>
-                    <Menu
-                        theme="light"
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        style={{ height: '100%', borderRight: 0 }}
-                    >
-                        <SubMenu key="sub1" title="Menu">
-                            <Menu.Item key="1">Change</Menu.Item>
-                            <Menu.Item key="2">Insert</Menu.Item>
-                            <Menu.Item key="3">Copyright</Menu.Item>
-                        </SubMenu>
-                    </Menu>
-                </Sider>
-
-                <Content style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
-                    <Form style={{ width: '70%', padding: '20px' }} form={form} onFinish={handleSubmit}>
-                        <Form.Item name="title" rules={[{ required: true, message: 'Introduceți Laboratorul' }]}>
-                            <Input placeholder="Name" />
-                        </Form.Item>
-                        <Form.Item name="content" rules={[{ required: true, message: 'Introduceti starea' }]}>
-                            <Input placeholder="Surname" />
-                        </Form.Item>
-                        <Form.Item name="prenume" rules={[{ required: true, message: 'Introduceti nota' }]}>
-                            <Input placeholder="Age" />
-                        </Form.Item>
-                        <Form.Item style={{ display: 'flex', justifyContent: 'center' }}>
-                            <Button type="primary" htmlType="submit">
-                                SendRequest
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        {cards.map(card => (
-                            <Card key={card.title} style={{ width: 300 }}>
-                                <Card.Meta title={`${card.title} - ${card.prenume}`} description={card.content} />
-                            </Card>
-                        ))}
-                    </div>
-                </Content>
-            </Layout>
-
-        </Layout>
+        <Form onFinish={handleFinish}>
+            <Form.Item label="Numele Studentului">
+                <Input name="name" value={formData.name} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Varsta">
+                <Input name="age" value={formData.age} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Posta Corporativa">
+                <Input name="email" value={formData.email} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Addressa">
+                <Input name="address" value={formData.address} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Telefonul">
+                <Input name="phone" value={formData.phone} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Occupatie">
+                <Input name="occupation" value={formData.occupation} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item label="Bursa">
+                <Input name="salary" value={formData.salary} onChange={handleChange} />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" style={{ background: 'gray' }}>
+                    Submit
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 
