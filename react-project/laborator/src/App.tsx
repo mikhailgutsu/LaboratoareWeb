@@ -1,70 +1,65 @@
-﻿import React, { useState } from 'react';
-import { Input, Form, Button } from 'antd';
+import React from 'react';
+import './lab4.css';
 
-import './App.css';
-
-interface MyInterface {
+interface User {
     name: string;
-    age: number;
     email: string;
+    age: number;
     address: string;
-    phone: string;
+    isActive: boolean;
 }
 
-export interface MyExtendedInterface extends MyInterface {
-    occupation: string;
-    salary: number;
+interface AdvancedUser extends User {
+    education: string;
+    skills: string[];
 }
 
-interface MyComponentProps {
-    data: MyExtendedInterface;
-    onSubmit: (data: MyExtendedInterface) => void;
-}
-
-export const App: React.FC<MyComponentProps> = ({ data, onSubmit }) => {
-    const [formData, setFormData] = useState(data);
-
-    const handleFinish = () => {
-        onSubmit(formData);
-    };
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    return (
-        <Form onFinish={handleFinish}>
-            <Form.Item label="Numele Studentului">
-                <Input name="name" value={formData.name} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Varsta">
-                <Input name="age" value={formData.age} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Posta Corporativa">
-                <Input name="email" value={formData.email} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Addressa">
-                <Input name="address" value={formData.address} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Telefonul">
-                <Input name="phone" value={formData.phone} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Occupatie">
-                <Input name="occupation" value={formData.occupation} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item label="Bursa">
-                <Input name="salary" value={formData.salary} onChange={handleChange} />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" style={{ background: 'gray' }}>
-                    Submit
-                </Button>
-            </Form.Item>
-        </Form>
-    );
+const user: AdvancedUser = {
+    name: 'Gutu Mihai',
+    email: 'mikhail.gutsu.2002@bsw-tech.com',
+    age: 20,
+    address: 'Chisinau 8',
+    isActive: true,
+    education: 'Intern C Embedded Developer from BMW',
+    skills: ['AUTOSAR', 'C', 'C++'],
 };
 
-export default App;
+function Lab4() {
+    return (
+        <div className="container">
+            <h1 className="title">Date Personale</h1>
+            <div className="card">
+                <p>
+                    <span className="label">Name:</span>
+                    <span className="value">{user.name}</span>
+                </p>
+                <p>
+                    <span className="label">Email:</span>
+                    <span className="value">{user.email}</span>
+                </p>
+                <p>
+                    <span className="label">Age:</span>
+                    <span className="value">{user.age}</span>
+                </p>
+                <p>
+                    <span className="label">Address:</span>
+                    <span className="value">{user.address}</span>
+                </p>
+                <p>
+                    <span className="label">Active:</span>
+                    <span className="value">{user.isActive.toString()}</span>
+                </p>
+                <p>
+                    <span className="label">Education:</span>
+                    <span className="value">{user.education}</span>
+                </p>
+                <p>
+                    <span className="label">Skills:</span>
+                    <span className="value">{user.skills.join(', ')}</span>
+                </p>
+            </div>
+        </div>
+    );
+}
+
+export default Lab4;
