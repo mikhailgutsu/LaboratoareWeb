@@ -1,86 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
+import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import { Menu } from 'antd';
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import {Pagina2} from "./Pagina2";
+import {Optiune1} from "./Optiune1";
 
-const UserInitial = [
-    { username: "m1gu", password: "12345" },
-    { username: "admin", password: "12345" },
-    { username: "mihai", password: "12345" },
-];
+const { SubMenu } = Menu;
 
-const App = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [EsteLogat, setEsteLogat] = useState(false);
-    const [users, SetareUser] = useState(UserInitial);
+function App() {
+  return (
+      <div className="main_cont">
+      <Router>
+        <Menu mode="inline">
+          <Menu.Item key="home" icon={<MailOutlined />}>
+            <Link to="/">Main</Link>
+          </Menu.Item>
+          <Menu.Item key="pagina2" icon={<AppstoreOutlined />}>
+            <Link to="/pagina2">Second</Link>
+          </Menu.Item>
+          <SubMenu key="sub1" icon={<SettingOutlined />} title="Opțiuni">
+            <Menu.Item key="optiune1">
+              <Link to="/optiune1">IMG-s</Link>
+            </Menu.Item>
+          </SubMenu>
+        </Menu>
 
-    useEffect(() => {
-        const storedUsers = localStorage.getItem("users");
-        if (storedUsers) {
-            SetareUser([...users, ...JSON.parse(storedUsers)]);
-        }
-    }, [users]);
-
-    const handleLogin = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        const foundUser = users.find(
-            (user) => user.username === username && user.password === password
-        );
-        if (foundUser) {
-            setEsteLogat(true);
-            localStorage.setItem("EsteLogat", "true");
-            localStorage.setItem("user", JSON.stringify(foundUser));
-            alert("Autentificare reușită");
-        } else {
-            alert("Login eșuat");
-        }
-    };
-
-
-    const handleLogout = () => {
-        setEsteLogat(false);
-        localStorage.setItem("EsteLogat", "false");
-        alert("Succes la deconectare");
-    };
-
-    const renderLoginForm = () => {
-        return (
-
-            <form onSubmit={handleLogin}>
-                <label>
-                    Username:
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                    />
-                </label>
-                <br />
-                <button type="submit">Autentificare</button>
-            </form>
-        );
-    };
-
-    const renderLogoutButton = () => {
-        const storedUser = localStorage.getItem("user");
-        const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
-        return (
-            <div>
-                {loggedInUser && <p>User : {loggedInUser.username}</p>}
-                <button onClick={handleLogout}>Ieșire</button>
-            </div>
-        );
-    };
-
-
-    return <div>{EsteLogat ? renderLogoutButton() : renderLoginForm()}</div>;
-};
+        <Routes>
+          <Route path="/" element={<h1>Ultimul Laborator la TWEB</h1>} />
+          <Route path="/pagina2" element={<Pagina2 />} />
+          <Route path="/optiune1" element={<Optiune1 />} />
+        </Routes>
+      </Router>
+      </div>
+  );
+}
 
 export default App;
